@@ -20,30 +20,33 @@ wait <- function() {
   }
 }
 
-zipfile = args[1]
+parse_csv <- function(filename) {
+  read.table(filename, header=FALSE, skip=1, sep=",", dec=".")
+}
+
+filename = args[1]
 
 # Unzip and parse
-if (endsWith(zipfile, ".zip")) {
+if (endsWith(filename, ".zip")) {
   tmp <- tempdir()
-  csvfile <- unzip(zipfile, "race_data.csv", exdir=tmp)
-  data <- read.table(csvfile, header=FALSE, skip=1, sep=",")
+  data <- parse_csv(unzip(filename, "race_data.csv", exdir=tmp))
   unlink(tmp)
 } else {
-  csvfile <- zipfile
-  data <- read.table(csvfile, header=FALSE, skip=1, sep=",")
+  data <- parse_csv(filename)
 }
 
 # Massage data
 names(data) <- c("race", "wpm", "accuracy", "rank", "racers", "text", "time")
 data$time <- strptime(data$time, format="%Y-%m-%d %H:%M:%OS", tz="UTC")
 
+wpm <- data$wpm
+time <- data$time
+acc <- data$accuracy
+
 # Display summaries of most important metrics
 summary(data[,c("wpm", "accuracy", "rank", "time")])
-
 
 # Plot WPM against time
 X11()
 plot(data$time, data$wpm, xlab=c("Time"), ylab=c("WPM"), pch="x")
 wait()
-
-#plot(data[,c("accuracy", "wpm")])
