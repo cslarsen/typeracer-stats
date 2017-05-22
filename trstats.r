@@ -23,23 +23,27 @@ wait <- function() {
 zipfile = args[1]
 
 # Unzip and parse
-tmp <- tempdir()
-csvfile <- unzip(zipfile, "race_data.csv", exdir=tmp)
-data <- read.table(csvfile, header=FALSE, skip=1, sep=",")
-unlink(tmp)
+if (endsWith(zipfile, ".zip")) {
+  tmp <- tempdir()
+  csvfile <- unzip(zipfile, "race_data.csv", exdir=tmp)
+  data <- read.table(csvfile, header=FALSE, skip=1, sep=",")
+  unlink(tmp)
+} else {
+  csvfile <- zipfile
+  data <- read.table(csvfile, header=FALSE, skip=1, sep=",")
+}
 
 # Massage data
 names(data) <- c("race", "wpm", "accuracy", "rank", "racers", "text", "time")
+data$time <- strptime(data$time, format="%Y-%m-%d %H:%M:%OS", tz="UTC")
 
 # Display summaries of most important metrics
-summary(data[,c("wpm", "accuracy", "rank")])
+summary(data[,c("wpm", "accuracy", "rank", "time")])
 
+
+# Plot WPM against time
 X11()
-plot(data$wpm, xlab=c("Race"), ylab=c("WPM"), pch="x")
-
-# TODO: Plot with TIME on x-axis, as it gives a better impression of
-# progression (especially if we add moving averages)
-
+plot(data$time, data$wpm, xlab=c("Time"), ylab=c("WPM"), pch="x")
 wait()
 
 #plot(data[,c("accuracy", "wpm")])
