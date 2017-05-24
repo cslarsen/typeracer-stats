@@ -21,7 +21,7 @@ wait <- function() {
 }
 
 parse_csv <- function(filename) {
-  read.table(filename, header=FALSE, skip=1, sep=",", dec=".")
+  read.table(filename, header=FALSE, skip=1000, sep=",", dec=".")
 }
 
 filename = args[1]
@@ -58,7 +58,7 @@ par(mfrow=c(3, 2))
 # WPM per race
 plot(wpm, main="WPM per Race", pch="x", xlab="Race", ylab="WPM")
 # Show moving averages
-lines(moving_averages(wpm, n=100), col="darkred", lwd=2)
+lines(moving_averages(wpm, n=50), col="darkred", lwd=2)
 # Show the mean
 abline(h=mean(wpm, lwd=1), col="red")
 
@@ -68,7 +68,12 @@ lines(moving_averages(wpm, n=50), col="blue", lwd=2)
 abline(h=mean(wpm, lwd=1), col="red")
 
 # Histogram WPM
-hist(wpm, main="WPM Histogram", xlab="WPM")
+#hist(wpm, main="WPM Histogram", xlab="WPM")
+hist(wpm, breaks=100, main="WPM Histogram", xlab="WPM", prob=TRUE)
+points(wpm, dnorm(wpm, mean=mean(wpm), sd=sd(wpm)), col="red", pch="x")
+abline(v=mean(wpm)-sd(wpm), col="blue")
+abline(v=mean(wpm)+sd(wpm), col="blue")
+abline(v=mean(wpm), col="red")
 
 # Normal distribution of WPM
 plot(wpm, dnorm(wpm, mean(wpm), sd(wpm)), pch="x", main="WPM Normal Plot", ylab="", xlab="WPM")

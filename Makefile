@@ -1,2 +1,2 @@
 check:
-	Rscript trstats.r race_data.zip
+	Rscript trstats.r ~/dl/race_data.zip
