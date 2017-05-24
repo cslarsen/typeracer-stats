@@ -21,7 +21,7 @@ wait <- function() {
 }
 
 parse_csv <- function(filename) {
-  read.table(filename, header=FALSE, skip=1, sep=",", dec=".")
+  read.table(filename, header=FALSE, skip=250, sep=",", dec=".")
 }
 
 filename = args[1]
@@ -46,7 +46,41 @@ acc <- data$accuracy
 # Display summaries of most important metrics
 summary(data[,c("wpm", "accuracy", "rank", "time")])
 
-# Plot WPM against time
+# Plots
 X11()
-plot(data$time, data$wpm, xlab=c("Time"), ylab=c("WPM"), pch="x")
+
+moving_averages <- function(x, n=5) {
+  filter(x, rep(1/n, n), sides=2)
+}
+
+par(mfrow=c(3, 2))
+
+# WPM per race
+plot(wpm, main="WPM per Race", pch="x", xlab="Race", ylab="WPM")
+# Show moving averages
+lines(moving_averages(wpm, n=250), col="darkred", lwd=2)
+# Show the mean
+abline(h=mean(wpm, lwd=1), col="red")
+
+# WPM per time
+plot(time, wpm, main="WPM over Time", pch="x", ylab="WPM", xlab="Time")
+lines(moving_averages(wpm, n=50), col="blue", lwd=2)
+abline(h=mean(wpm, lwd=1), col="red")
+
+# Histogram WPM
+hist(wpm, main="WPM Histogram", xlab="WPM")
+
+# Normal distribution of WPM
+plot(wpm, dnorm(wpm, mean(wpm), sd(wpm)), pch="x", main="WPM Normal Plot", ylab="", xlab="WPM")
+abline(v=mean(wpm), col="red")
+
+# Accuracy vs WPM
+plot(acc, wpm, ylab="WPM", xlab="Accuracy", main="WPM per Accuracy", pch="x")
+abline(h=mean(wpm), col="red")
+
+# Accuracy Normal
+plot(acc, dnorm(acc, mean(acc), sd(acc)), ylab="", xlab="Accuracy", pch="x", main="Accuracy Normal Plot")
+abline(v=mean(acc), col="red")
+abline(h=mean(wpm), col="red")
+
 wait()
