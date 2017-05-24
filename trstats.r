@@ -21,7 +21,7 @@ wait <- function() {
 }
 
 parse_csv <- function(filename) {
-  read.table(filename, header=FALSE, skip=250, sep=",", dec=".")
+  read.table(filename, header=FALSE, skip=1, sep=",", dec=".")
 }
 
 filename = args[1]
@@ -58,7 +58,7 @@ par(mfrow=c(3, 2))
 # WPM per race
 plot(wpm, main="WPM per Race", pch="x", xlab="Race", ylab="WPM")
 # Show moving averages
-lines(moving_averages(wpm, n=250), col="darkred", lwd=2)
+lines(moving_averages(wpm, n=100), col="darkred", lwd=2)
 # Show the mean
 abline(h=mean(wpm, lwd=1), col="red")
 
@@ -79,8 +79,9 @@ plot(acc, wpm, ylab="WPM", xlab="Accuracy", main="WPM per Accuracy", pch="x")
 abline(h=mean(wpm), col="red")
 
 # Accuracy Normal
-plot(acc, dnorm(acc, mean(acc), sd(acc)), ylab="", xlab="Accuracy", pch="x", main="Accuracy Normal Plot")
-abline(v=mean(acc), col="red")
-abline(h=mean(wpm), col="red")
+hist(acc, main="Accuracy Histogram")
+#plot(acc, dnorm(acc, mean(acc), sd(acc)), ylab="", xlab="Accuracy", pch="x", main="Accuracy Normal Plot")
+#abline(v=mean(acc), col="red")
+#abline(h=mean(wpm), col="red")
 
 wait()
