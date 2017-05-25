@@ -3,28 +3,32 @@
 # Copyright 2017 Christian Stigen Larsen
 # Distributed under the LGPL v3 or later.
 
-args <- commandArgs(TRUE)
+if (interactive()) {
+  filename = "" # ENTER PATH TO race_data.zip HERE!
+} else {
+  args <- commandArgs(TRUE)
 
-println <- function(...) {
-  cat(..., "\n", sep="")
-}
-
-if (length(args) == 0) {
-  println("Usage: trstats.r race_data.csv")
-  quit("no", 1)
-}
-
-wait <- function() {
-  while (!is.null(dev.list())) {
-    Sys.sleep(1)
+  println <- function(...) {
+    cat(..., "\n", sep="")
   }
+
+  if (length(args) == 0) {
+    println("Usage: trstats.r race_data.csv")
+    quit("no", 1)
+  }
+
+  wait <- function() {
+    while (!is.null(dev.list())) {
+      Sys.sleep(1)
+    }
+  }
+
+  filename = args[1]
 }
 
 parse_csv <- function(filename) {
   read.table(filename, header=FALSE, skip=1000, sep=",", dec=".")
 }
-
-filename = args[1]
 
 # Unzip and parse
 if (endsWith(filename, ".zip")) {
@@ -46,11 +50,13 @@ acc <- data$accuracy
 # Display summaries of most important metrics
 summary(data[,c("wpm", "accuracy", "rank", "time")])
 
-# Plots
-X11()
-
 moving_averages <- function(x, n=5) {
   filter(x, rep(1/n, n), sides=2)
+}
+
+# Plots
+if (!interactive()) {
+  X11()
 }
 
 par(mfrow=c(3, 2))
@@ -89,4 +95,6 @@ hist(acc, main="Accuracy Histogram")
 #abline(v=mean(acc), col="red")
 #abline(h=mean(wpm), col="red")
 
-wait()
+if (!interactive()) {
+  wait()
+}
