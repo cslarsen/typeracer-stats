@@ -1,6 +1,6 @@
+*.csv
+*.pdf
 *.zip
-cat
 GPATH
 GRTAGS
 GTAGS
-Rplots.pdf
