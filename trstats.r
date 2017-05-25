@@ -4,7 +4,7 @@
 # Distributed under the LGPL v3 or later.
 
 if (interactive()) {
-  filename = "" # ENTER PATH TO race_data.zip HERE!
+  filename = "~/dl/race_data.zip" # ENTER PATH TO race_data.zip HERE!
 } else {
   args <- commandArgs(TRUE)
 
@@ -75,15 +75,16 @@ abline(h=mean(wpm, lwd=1), col="red")
 
 # Histogram WPM
 #hist(wpm, main="WPM Histogram", xlab="WPM")
-hist(wpm, breaks=100, main="WPM Histogram", xlab="WPM", prob=TRUE)
+hist(wpm, breaks=100, main="WPM Histogram and Normal", xlab="WPM", prob=TRUE)
 points(wpm, dnorm(wpm, mean=mean(wpm), sd=sd(wpm)), col="red", pch="x")
 abline(v=mean(wpm)-sd(wpm), col="blue")
 abline(v=mean(wpm)+sd(wpm), col="blue")
 abline(v=mean(wpm), col="red")
 
 # Normal distribution of WPM
-plot(wpm, dnorm(wpm, mean(wpm), sd(wpm)), pch="x", main="WPM Normal Plot", ylab="", xlab="WPM")
-abline(v=mean(wpm), col="red")
+#plot(wpm, dnorm(wpm, mean(wpm), sd(wpm)), pch="x", main="WPM Normal Plot", ylab="", xlab="WPM")
+#abline(v=mean(wpm), col="red")
+boxplot(wpm, main="Boxplot of WPM", ylab="WPM")
 
 # Accuracy vs WPM
 plot(acc, wpm, ylab="WPM", xlab="Accuracy", main="WPM per Accuracy", pch="x")
