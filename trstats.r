@@ -3,6 +3,8 @@
 # Copyright 2017 Christian Stigen Larsen
 # Distributed under the LGPL v3 or later.
 
+SKIP <- 0
+
 if (interactive()) {
   filename = "~/dl/race_data.zip" # ENTER PATH TO race_data.zip HERE!
 } else {
@@ -23,11 +25,16 @@ if (interactive()) {
     }
   }
 
-  filename = args[1]
+  filename <- args[1]
+
+  if (length(args) > 1) {
+    SKIP <- args[2]
+  }
 }
 
 parse_csv <- function(filename) {
-  read.table(filename, header=FALSE, skip=1000, sep=",", dec=".")
+  println("reading ", filename)
+  read.table(filename, header=FALSE, skip=SKIP, sep=",", dec=".")
 }
 
 # Unzip and parse
