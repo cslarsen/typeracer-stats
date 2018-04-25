@@ -7,14 +7,18 @@ println <- function(...) {
 
 parse_csv <- function(filename) {
   data <- read.table(filename, header=FALSE, skip=0, sep=",", dec=".")
-  names(data) <- c("race", "wpm", "accuracy", "rank", "racers", "text", "time")
+  names(data) <- c("race", "wpm", "accuracy", "rank", "racers", "text_id", "time", "db", "keyboard")
   data$time <- strptime(data$time, format="%Y-%m-%d %H:%M:%OS", tz="UTC")
   return (data)
 }
 
 args <- commandArgs(TRUE)
-filename <- args[1]
-results <- parse_csv(filename)
+if (length(args) == 0) {
+  results <- parse_csv("~/.wpm.csv")
+} else {
+  filename <- args[1]
+  results <- parse_csv(filename)
+}
 
 wpm = results$wpm
 
