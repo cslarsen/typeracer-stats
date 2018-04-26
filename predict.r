@@ -31,10 +31,10 @@ wpm = results$wpm
 acc = results$acc
 
 println("WPM summary")
-summary(wpm)
+print(summary(wpm))
 
 println("\nAccuracy summary")
-summary(acc)
+print(summary(acc))
 
 println("\nPredicted WPM interval given mean accuracy of ", mean(acc))
-predict(lm(wpm ~ acc), data.frame(acc=mean(acc)), interval="predict")
+print(predict(lm(wpm ~ acc), data.frame(acc=mean(acc)), interval="predict"))
