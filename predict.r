@@ -12,6 +12,12 @@ parse_csv <- function(filename) {
   return (data)
 }
 
+parse_diffs <- function(filename) {
+  data <- read.table(filename, header=FALSE, skip=0, sep=",", dec=".")
+  names(data) <- c("wpm", "acc", "diff", "len")
+  return (data)
+}
+
 args <- commandArgs(TRUE)
 if (length(args) == 0) {
   results <- parse_csv("~/.wpm.csv")
